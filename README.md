@@ -1,0 +1,1 @@
+This project proposes a Neuromorphic Spiking Neural Network (SNN) to predict direct cross-rates for BRICS currency pairs. By treating price changes as discrete "spikes," the model will detect liquidity patterns in real-time with lower latency and 80% higher energy efficiency than traditional neural networks, facilitating a "USD-free" automated trading infrastructure.
