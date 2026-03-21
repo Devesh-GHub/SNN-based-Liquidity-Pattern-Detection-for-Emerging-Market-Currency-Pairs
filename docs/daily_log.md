@@ -113,3 +113,144 @@ v_reset = 0.0    After a settlement event fires, system resets cleanly
 spike = 1        "This is a significant cross-rate movement"
 spike = 0        "Normal day, no settlement action needed"
 
+
+## Day 13 — Saturday
+**What I did:** Researched real SBI and HDFC outward remittance fees, 
+SWIFT correspondent bank charges, and Brazil IOF tax. Built a complete 
+cost formula for a ₹10,00,000 INR→BRL transaction. Calculated current 
+route total at ₹42,080 (4.21%) vs proposed at ₹1,180 (0.12%). Wrote 
+the User Story for a Surat textile exporter. Saved as docs/fee_research.md.
+
+**What I noticed:** The biggest cost is NOT the flat bank fee (₹1,000) —  
+it's the hidden FX spread (₹35,000+). This is the academically important 
+insight: the markup is invisible to the exporter until they compare 
+against mid-market rates. My SNN system's value proposition is eliminating 
+the two-leg conversion, not just the flat fee.
+
+**One question I have:** The 0.1% proposed fee assumption will be 
+challenged in any thesis review. Should I cite a specific BIS or RBI 
+paper on DLT/blockchain settlement costs to back it up?
+
+
+## Day 14 — Sunday
+**What I did:** Read RBI CBDC Concept Note (Executive Summary + Wholesale 
+section) and BIS mBridge project documentation. Extracted structured policy 
+notes with direct quotes. Wrote one-page project_motivation.md covering 
+problem, why solutions fail, why SNN, policy alignment, and User Story.
+
+**What I noticed:** Neither the RBI document nor mBridge mentions AI or ML 
+anywhere. This is the gap — infrastructure is being built but the 
+intelligence layer for optimal settlement timing doesn't exist yet. That's 
+exactly what our project contributes.
+
+**One question I have:** mBridge involved RBI only as an "observer member" 
+— India has not committed to it. Should I position my project as supporting 
+India's *own* bilateral INR/BRL corridor instead of as a BRICS-wide system, 
+to make the policy case stronger and more specific?
+
+
+## Day 15 — Monday
+**What I did:** Built 9 features from INR/BRL daily data: 5 price-based 
+(return, log return, rolling mean/std, momentum), 3 spike-based (signal, 
+intensity, inter-spike interval), 1 macro (repo rate). Created binary 
+direction target. Ran leakage audit. Saved feature_matrix_daily.csv. 
+Printed correlation table.
+
+**What I noticed:** Correlations with target are all below 0.05 — typical 
+for FX data. The inter-spike interval feature is unique — no standard 
+finance ML paper uses it. Low linear correlation doesn't mean the SNN 
+can't learn from it: SNNs capture temporal non-linear patterns that 
+Pearson correlation completely misses.
+
+**One question I have:** Should I add a "time of week" feature (day 
+of week as integer 0-4)? Monday and Friday often show different FX 
+behaviour due to position squaring. Or does that risk overfitting on 
+a 5-year window?
+```
+
+---
+
+### 🧠 Why each feature earns its place
+```
+Feature                  Why it belongs
+─────────────────────────────────────────────────────────────────
+daily_return             Raw signal — the fundamental input
+log_return               Stabilised version — better for gradient-based training
+rolling_mean_7d          Trend context — is the rate rising or falling?
+rolling_std_7d           Volatility context — is now a calm or stressed period?
+price_momentum_5d        Medium-term direction — week-scale trend
+spike_signal             Event flag — did anything significant happen today?
+spike_intensity          Event magnitude — how significant was it?
+inter_spike_interval     Calm duration — how long since last stress event?  ← unique
+india_repo_rate          Macro anchor — monetary policy context
+─────────────────────────────────────────────────────────────────
+target                   Tomorrow's direction — what we predict
+
+
+
+## Day 17 — Wednesday
+**What I did:** Created 07_lstm_baseline_prep.ipynb. Wrote a 5-sentence 
+LSTM explanation in my own words. Built create_sequences() function — 
+converts flat feature matrix into (samples, 10, 9) sliding windows. 
+Applied to train and val sets. Manually verified sample 0 has no future 
+data leakage. Wrote LSTM architecture plan in markdown.
+
+**What I noticed:** After the lookback window, I lose 10 rows from each 
+split — small but expected. The sequence shape (samples, 10, 9) makes 
+the data leakage check visual and obvious: X is always rows t-10 to t-1, 
+y is always row t. The LSTM treats all 10 days equally; the SNN will 
+weight recent spikes more via the LIF membrane decay.
+
+**One question I have:** Should I normalise features BEFORE creating 
+sequences (normalise → sequence) or AFTER (sequence → normalise)? And 
+should normalisation parameters (mean, std) be fitted on train only, 
+then applied to val and test?
+
+
+## Day 18 — Thursday
+**What I did:** Built hourly feature matrix from USDINR/USDBRL hourly 
+clean data. Derived hourly INR/BRL cross rate. Calibrated spike threshold 
+to ~0.1% (hourly moves are ~5x smaller than daily). Added time-of-day 
+feature (0-23 UTC) — spike rate varies meaningfully by session. Saved 
+feature_matrix_hourly.csv. Compared daily vs hourly spike consistency.
+
+**What I noticed:** Spike rate is higher in European session overlap 
+(07-13 UTC) — this makes sense as London is the dominant FX centre and 
+INR/BRL both react to European risk sentiment. The consistency check 
+confirms that days with daily spikes also tend to have multiple hourly 
+spikes — the two scales are telling the same story at different resolution.
+
+**One question I have:** For the dashboard demo, should I show the 
+hourly spike train as a live-updating chart? If yes, I need to think 
+about how to simulate "streaming" data from the hourly CSV.
+```
+
+---
+
+### 🧠 Daily vs hourly — the two-scale picture
+```
+Scale     Threshold   Captures                  Used for
+────────────────────────────────────────────────────────────
+Daily     0.5%        Day-level regime shifts   SNN model training
+                      (COVID, policy decisions)  thesis evaluation
+
+Hourly    0.1%        Session-level volatility  Dashboard live feed
+                      (London open, NY overlap)  real-time demo feel
+
+
+## Day 19 — Friday
+**What I did:** Updated README.md with full project state — problem, 
+solution, data, folder structure, environment setup, progress checklist, 
+key research numbers, and customer profile. Ran version collector to get 
+exact package versions. Git committed all Week 3 work.
+
+**What I noticed:** Writing the README forced me to see the whole project 
+at once. Month 1 is more complete than it feels day-to-day — 14 checkboxes 
+ticked. The README is also the document I would show a professor or 
+supervisor tomorrow and it would make sense to them.
+
+**One question I have:** For Month 2, should I add a requirements.txt 
+file (pip freeze > requirements.txt) in addition to the README install 
+instructions, so the environment is fully reproducible without manually 
+specifying versions?
+
