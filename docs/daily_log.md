@@ -254,3 +254,182 @@ file (pip freeze > requirements.txt) in addition to the README install
 instructions, so the environment is fully reproducible without manually 
 specifying versions?
 
+
+## Month 2, Day 1 — Monday
+
+**What I did:** Created notebooks/09_snn_model.ipynb. Loaded train/val 
+CSVs, dropped NaN rows, normalised with MinMaxScaler fitted on train 
+only. Built TimeSeriesDataset class with sliding window __getitem__. 
+Created DataLoaders (batch=32, shuffle=False). Verified batch shape 
+(32, 10, 9). Saved scaler to outputs/scaler.pkl.
+
+**What I noticed:** After dropna, train has slightly fewer rows than 
+the raw split — expected from rolling window warm-up NaNs. The 
+scaler.pkl save is critical: FastAPI will need the exact same 
+normalisation at inference time or predictions will be garbage.
+
+**One question I have:** The DataLoader returns X in shape (B, T, F) 
+but SpikingJelly expects (T, B, F) — time-first. Should I transpose 
+inside the training loop or inside the model's forward() method?
+
+## Month 2, Day 2 — Tuesday
+**What I did:** Defined BRICSLiquiditySNN class with 2 LIF layers, 
+surrogate gradient (ATan), spike accumulator readout. Verified forward 
+pass: (32,10,9) → (32,1). Counted parameters (~500 total — deliberately 
+small for dataset size). Added spike_rate_monitor() utility. Wrote full 
+architecture justification covering tau choice, two-layer design, 
+accumulator readout, and RNN comparison.
+
+**What I noticed:** Before training, lif1 and lif2 spike rates are 
+near-random (~0.3-0.5) and output probabilities hover near 0.5 — 
+exactly as expected for an untrained model. The functional.reset_net() 
+call is critical: without it, membrane voltage from batch N leaks into 
+batch N+1 and training diverges.
+
+**One question I have:** The surrogate gradient ATan is one option — 
+SpikingJelly also offers Sigmoid and PiecewiseQuadratic surrogates. 
+Does the choice of surrogate function significantly affect final 
+accuracy, or is it mainly a training stability concern?
+
+
+## Month 2, Day 3 — Wednesday
+**What I did:** Wrote full training loop with BCE loss, Adam optimiser, 
+ReduceLROnPlateau scheduler, early stopping (patience=10), gradient 
+clipping (max_norm=1.0). Tracked train/val loss, accuracy, and AUC 
+per epoch. Restored best model weights. Saved model checkpoint to 
+outputs/snn_best.pt and training log to outputs/snn_training_log.csv.
+
+**What I noticed:** [fill in your actual results]
+- First epoch loss: [X] — confirms no NaN, model is alive
+- Val AUC after 30 epochs: [X] — [above/near] random baseline
+- Early stopping triggered at epoch [X] / ran full 30 epochs
+
+**One question I have:** My val AUC is hovering around 0.50–0.55 
+after 30 epochs. Is this expected for financial direction prediction, 
+or does it mean the model isn't learning? What's a realistic target 
+AUC for this type of problem?
+```
+
+---
+
+### 🧠 Your answer — AUC 0.50–0.55 is normal and expected
+
+FX direction prediction is one of the hardest ML problems. Here's the realistic target landscape:
+```
+AUC range     Interpretation
+──────────────────────────────────────────────────────
+0.50          Random — model learned nothing
+0.51 – 0.55   Weak signal — model found something, not reliable
+0.55 – 0.62   Moderate — publishable for academic thesis ✅
+0.62 – 0.70   Strong — excellent for FX prediction
+> 0.70        Suspicious — check for data leakage
+
+
+
+## Month 2, Day 4 — Thursday
+**What I did:** Final clean training run (50 epochs, early stop=10,
+AUC-based stopping). Plotted learning curves (loss, accuracy, AUC).
+Computed full validation metrics: accuracy, precision, recall, F1,
+AUC, confusion matrix, ROC curve. Saved model weights (snn_model.pth),
+full checkpoint (snn_best.pt), and config JSON (snn_config.json).
+
+**Official SNN results:**
+- Accuracy  : [fill]
+- Precision : [fill]
+- Recall    : [fill]
+- F1        : [fill]
+- AUC-ROC   : [fill]
+- Best epoch: [fill]
+
+**What I noticed:** [choose what applies]
+- Confusion matrix shows model is [biased toward UP / balanced / 
+  biased toward DOWN]. 
+- ROC curve shows AUC above random baseline — genuine signal found.
+- False alarm rate of [X]% means [X]% of "SETTLE NOW" signals 
+  would be triggered on unfavourable days — acceptable for a demo.
+
+**One question I have:** For the thesis comparison table, should I
+report metrics on the val set or wait and use the test set? I haven't
+touched test_features.csv yet as instructed.
+```
+
+---
+
+### 🧠 Your answer — val set for development, test set for final paper
+
+Use **val set now** for all development comparisons (SNN vs LSTM tuning). The test set is opened **exactly once** in Month 3 for the final thesis table. The rule is:
+```
+Val set   → used during development to compare models      (now)
+Test set  → opened once for final honest evaluation        (Month 3)
+
+
+
+## Month 2, Day 5 — Friday
+**What I did:** Recorded spike activity from LIF1 and LIF2 layers using
+PyTorch forward hooks across 50 validation sequences. Plotted spike raster
+for individual samples (UP vs DOWN predicted). Plotted average spike rate
+per timestep and per neuron heatmaps. Calculated energy efficiency estimate
+vs dense LSTM baseline using SynOps framework (Blouw et al., 2019).
+
+**Official spike rates:**
+- LIF1 mean spike rate : [fill]%
+- LIF2 mean spike rate : [fill]%
+- Energy reduction vs dense: [fill]%
+
+**What I noticed:** [fill after running]
+- Spike patterns differ between UP-predicted and DOWN-predicted samples
+  (or: look similar — note honestly what you see)
+- Some neurons fire consistently across all timesteps (always-active)
+  while others are selective (fire only on specific days)
+- The heatmap shows [early/late/uniform] timesteps have highest activity
+
+**One question I have:** The energy efficiency calculation assumes 45nm
+CMOS hardware. Modern neuromorphic chips (Intel Loihi 2) use 7nm. Should
+I recalculate with a 7nm energy figure, or keep 45nm as a conservative
+published benchmark?
+
+
+
+## Month 2, Day 6 — Saturday
+**What I did:** Ran 5 SNN configurations varying tau, v_threshold, lr,
+and hidden size. Each trained 20 epochs. Compared AUC, F1, spike rate.
+Selected best config by efficiency-weighted F1. Retrained best config
+for 50 epochs. Saved snn_model_best.pth and updated snn_config.json.
+
+**Experiment results:**
+| Config | AUC | F1 | Spike% |
+|---|---|---|---|
+| Baseline | [fill] | [fill] | [fill] |
+| tau=3.0 | [fill] | [fill] | [fill] |
+| vth=0.3 | [fill] | [fill] | [fill] |
+| lr=5e-4 | [fill] | [fill] | [fill] |
+| Wide net | [fill] | [fill] | [fill] |
+
+**Best config:** [fill from output]
+
+**What I noticed:** [fill honestly]
+
+**One question I have:** The experiment shows spike rate varies across
+configurations. For the energy efficiency claim in the paper, should I
+report the spike rate of the BEST model or the average across all
+configs? And should I compare against LSTM FLOPs or SynOps?
+```
+
+---
+
+### 🧠 Your answer to the log question
+
+Report **the best model's spike rate** — that's your deployed model and the one you're making claims about. For the comparison:
+```
+In the thesis, report both:
+1. SNN SynOps vs Dense ANN SynOps  ← apples-to-apples (same framework)
+2. SNN SynOps vs LSTM FLOPs        ← cross-architecture (note the caveat)
+
+With a footnote:
+"SynOps and FLOPs are not directly equivalent units;
+the comparison is indicative of relative computational
+sparsity rather than exact energy consumption."
+
+
+
+
