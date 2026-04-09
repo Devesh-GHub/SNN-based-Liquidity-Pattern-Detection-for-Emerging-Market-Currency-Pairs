@@ -4,10 +4,8 @@
   "hidden2": 32,
   "tau": 2.0,
   "v_threshold": 0.1,
-  "lr": 0.001,
   "lookback": 10,
   "spike_threshold": 0.003,
-  "optimal_threshold": 0.5226,
   "feature_cols": [
     "daily_return",
     "log_return",
@@ -19,10 +17,11 @@
     "inter_spike_interval",
     "india_repo_rate"
   ],
-  "val_auc": 0.555,
-  "val_acc": 0.5,
-  "val_f1": 0.563,
-  "spike_rate": 0.4776,
-  "epochs_trained": 10,
-  "experiment_source": "10_snn_experiments.ipynb"
+  "epochs_trained": 2,
+  "val_auc": 0.5376,
+  "val_acc": 0.5339,
+  "val_f1": 0.5075,
+  "val_precision": 0.4404,
+  "val_recall": 0.5986,
+  "optimal_threshold": 0.5163
 }

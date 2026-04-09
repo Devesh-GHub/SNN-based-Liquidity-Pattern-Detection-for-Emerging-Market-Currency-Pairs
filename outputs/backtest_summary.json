@@ -1,0 +1,19 @@
+{
+  "val_period_start": "2024-03-11",
+  "val_period_end": "2025-02-27",
+  "n_trading_days": 354,
+  "transaction_size": 1000000,
+  "n_direct": 35,
+  "n_fallback": 319,
+  "direct_rate_pct": 9.89,
+  "direct_accuracy_pct": 51.43,
+  "total_cost_snn": 11526000.0,
+  "total_cost_swift": 12744000.0,
+  "total_saving": 1218000.0,
+  "saving_pct": 9.56,
+  "annualised_saving": 867050.85,
+  "prob_threshold": 0.7,
+  "rate_threshold": 0.1,
+  "direct_cost_pct": 0.001,
+  "swift_cost_pct": 0.035
+}

@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "generated_at": "2026-04-06T08:14:46.897784",
+    "prediction_date": "2025-02-27",
+    "model": "BRICSLiquiditySNN v1.0",
+    "val_auc": 0.5376
+  },
+  "transaction": {
+    "amount_inr": 1000000,
+    "amount_formatted": "₹1,000,000",
+    "monthly_tx_count": 5
+  },
+  "usd_route": {
+    "total_cost_inr": 42080.0,
+    "cost_percentage": 4.208,
+    "settlement_days": "T+2 to T+3",
+    "settlement_hours": 48,
+    "steps": [
+      "INR → USD (SBI FxOut)",
+      "USD → BRL (Brazilian correspondent)"
+    ],
+    "itemised": {
+      "inr_usd_spread": 20000.0,
+      "swift_flat_fee": 1000,
+      "swift_gst": 180.0,
+      "correspondent_fee": 2100.0,
+      "brl_spread": 15000.0,
+      "iof_tax": 3800.0
+    },
+    "source": "SBI FxOut FAQ; HDFC remittance page (2024)"
+  },
+  "snn_route": {
+    "total_cost_inr": 1236.0,
+    "cost_percentage": 0.1236,
+    "settlement_days": "T+0",
+    "settlement_hours": 0.08,
+    "steps": [
+      "INR → BRL (direct, SNN-powered)"
+    ],
+    "itemised": {
+      "settlement_fee": 1000.0,
+      "flat_fee": 200,
+      "flat_gst": 36.0
+    },
+    "assumption_note": "0.1% fee assumed per BIS DLT benchmark (2022)"
+  },
+  "savings": {
+    "amount_inr": 40844.0,
+    "amount_formatted": "₹40,844.00",
+    "percentage": 97.06,
+    "latency_saving_hours": 47.92,
+    "latency_saving_days": 2.0,
+    "annual_estimate_inr": 2450640.0,
+    "annual_formatted": "₹2,450,640.00",
+    "monthly_tx_assumption": 5
+  },
+  "snn_prediction": {
+    "probability": 0.5919,
+    "direction": "UP",
+    "confidence": 0.1838,
+    "spike_rate": 0.4891,
+    "spike_rate_pct": 48.91,
+    "recommendation": "USD_FALLBACK",
+    "recommendation_text": "Use conventional USD route. SNN confidence below threshold — defer to SWIFT for this transaction.",
+    "prob_threshold_used": 0.7,
+    "rate_threshold_used": 0.1
+  },
+  "customer_profile": {
+    "persona": "Indian textile exporter, Surat",
+    "pain_point": "Currently loses ₹42,080 (4.21%) per ₹1,000,000 transaction via USD routing",
+    "solution_saving": "SNN settlement saves ₹40,844 (97.1%) per transaction",
+    "annual_saving": "₹2,450,640 at 5 tx/month",
+    "latency_improvement": "T+2 to T+3 → T+0"
+  },
+  "assumptions": [
+    "SNN direct settlement fee of 0.1% is assumed per BIS DLT benchmark (2022) — not yet validated in production",
+    "USD→INR rate of ₹84 used for correspondent fee conversion",
+    "Annual saving estimate assumes constant transaction volume",
+    "SNN prediction based on val-set model (AUC=0.555) — not a live market prediction",
+    "Energy efficiency claims apply to neuromorphic hardware only"
+  ]
+}

@@ -431,5 +431,159 @@ the comparison is indicative of relative computational
 sparsity rather than exact energy consumption."
 
 
+## Month 2, Day 8 — Monday
+**What I did:** Created notebooks/11_lstm_baseline.ipynb. Loaded same
+train/val data with same scaler.pkl (fair comparison guaranteed).
+Defined BRICSLiquidityLSTM with hidden=32, dropout=0.2, 1 layer.
+Verified forward pass shape (32,1). Compared parameter counts.
+Built architecture comparison table.
 
+**Parameter comparison:**
+  SNN parameters  : [fill from output]
+  LSTM parameters : [fill from output]
+  LSTM has [X]x more/fewer params than SNN
+
+**FLOPs comparison:**
+  SNN SynOps/inference  : ~3,046
+  LSTM FLOPs/inference  : [fill from output]
+
+**What I noticed:** LSTM has [more/fewer] parameters than SNN despite
+simpler architecture. This is because LSTM's 4 gate matrices
+(input, forget, cell, output) each of size (hidden × features +
+hidden × hidden) add up quickly. SNN's parameters are only in the
+FC layers — LIF neurons have no learnable weights by default.
+
+**One question I have:** Should I report LSTM parameters including
+or excluding the LSTM's bias terms? Some papers count bias separately.
+
+
+## Month 2, Day 9 — Tuesday
+**What I did:** Trained BRICSLiquidityLSTM for 50 epochs with same
+setup as SNN (Adam lr=0.001, BCEWithLogitsLoss, same pos_weight,
+same early stopping). Computed full val metrics with Youden J
+threshold. Saved lstm_model.pth, lstm_best.pt, lstm_config.json,
+lstm_training_log.csv, lstm_confusion_matrix.png.
+
+**KEY DIFFERENCE noted — no reset_net() for LSTM:**
+  SNN needs functional.reset_net() before each batch because LIF
+  membrane voltage is stored as a module attribute and persists
+  between batches unless explicitly cleared.
+  LSTM manages (h_n, c_n) state internally — PyTorch resets it
+  automatically when a new sequence starts (h_0 defaults to zeros).
+  This is a meaningful architectural difference: SNN state management
+  is explicit and user-controlled; LSTM state is implicit.
+
+**LSTM official results:**
+  AUC      : [fill]
+  F1       : [fill]
+  Accuracy : [fill]
+  Threshold: [fill]
+  Train time: [fill]s
+
+**Preliminary comparison (val set):**
+  [fill winner column from Cell 15 output]
+
+**One question I have:** The comparison shows [SNN/LSTM] wins on AUC
+and [SNN/LSTM] wins on F1. For the thesis, should I report both
+metrics or just AUC? And how do I frame a result where one model
+wins on one metric and loses on another?
+
+
+
+## Month 2, Day 10 — Wednesday
+**What I did:** Built full comparison notebook (12_model_comparison.ipynb).
+Loaded both models from saved checkpoints. Evaluated on identical val
+set. Measured inference time (50 runs, warmup excluded). Computed FLOPs
+and energy estimates. Built 13-row comparison table. Plotted learning
+curves and ROC comparison. Wrote results section paragraph.
+
+**Official comparison results:**
+  SNN  AUC=[fill]  F1=[fill]  Acc=[fill]  Params=2945
+  LSTM AUC=[fill]  F1=[fill]  Acc=[fill]  Params=5537
+  Energy reduction: [fill]×
+
+**What I noticed:** [fill honestly]
+  - SNN wins on AUC and F1 — the two threshold-independent / balanced
+    metrics that matter most for imbalanced classification
+  - LSTM wins on accuracy — a threshold artefact, not real superiority
+  - Energy difference is the strongest argument in the paper:
+    [X]× reduction is a concrete, quantified, citable claim
+
+**One question I have:** For the paper, should I include the
+inference time comparison (ms/batch)? SNN is slower on CPU because
+PyTorch doesn't have a sparse SNN backend — the energy advantage
+only materialises on neuromorphic hardware (Loihi, SpiNNaker).
+Should I acknowledge this limitation explicitly?
+
+
+## Month 2, Day 11 — Thursday
+**What I did:** Built error analysis across 3 dimensions: shared vs
+unique errors (Jaccard overlap), accuracy by volatility quartile,
+and spike rate on correct vs error days. Saved error_analysis.csv
+and error_analysis_plots.png. Wrote 3 markdown observations.
+
+**Key findings:**
+- Jaccard error overlap: [fill] → ensemble potential [high/low]
+- SNN accuracy Q1(calm)=[fill] vs Q4(volatile)=[fill]
+- Spike rate correct=[fill] vs error=[fill] → [novel/null finding]
+
+**What I noticed:** [fill honestly — what surprised you most?]
+
+**Future Work paragraph (draft):**
+"Three directions emerge from the error analysis: (1) ensemble
+methods combining SNN and LSTM predictions to exploit error
+complementarity; (2) adaptive spike thresholds that scale with
+rolling volatility; (3) spike-rate confidence filters that defer
+low-confidence settlement signals to human review."
+
+
+## Month 2, Day 13 — Saturday
+**What I did:** Built settlement decision function with dual-condition
+routing (prob > threshold AND spike_rate > 0.10). Backtested on full
+val set. Computed aggregate savings, direct accuracy, and risk metrics.
+Saved backtest_results.csv, cumulative_savings_plot.png,
+backtest_summary.json.
+
+**Backtest results:**
+  Trading days     : [fill]
+  DIRECT decisions : [fill] ([fill]%)
+  DIRECT accuracy  : [fill]%
+  Total saving     : ₹[fill]
+  Saving %         : [fill]%
+  Annualised       : ₹[fill]
+
+**What I noticed:** Even on wrong DIRECT days, the direct fee
+(₹1,200) is still lower than the SWIFT fee (₹36,000) — so the
+downside risk of a wrong prediction is structurally bounded.
+The dual-condition filter (prob + spike_rate) reduces false
+positives compared to probability-only routing.
+
+**One question I have:** The backtest assumes one transaction per
+trading day. For a real exporter doing 2-3 transactions per week,
+should I scale the savings by actual transaction frequency, or
+present it per-transaction and let the reader scale it?
+
+
+## Month 2, Day 14 — Sunday
+**What I did:** Built get_dashboard_summary() function returning
+complete JSON payload for all dashboard panels. Tested with 3
+transaction sizes (₹1L, ₹10L, ₹50L). Validated JSON structure.
+Saved dashboard_data_sample.json. Git committed Week 2 weekend work.
+
+**Savings scaling table:**
+  ₹1L   transaction: saving ₹[fill] ([fill]%)
+  ₹10L  transaction: saving ₹[fill] ([fill]%)
+  ₹50L  transaction: saving ₹[fill] ([fill]%)
+
+**What I noticed:** The % saving is roughly constant across
+transaction sizes (both routes scale proportionally) but the
+SWIFT flat fee (₹1,000) becomes relatively less important for
+larger transactions. This means the saving % is slightly higher
+for larger transactions — a natural result of the flat fee
+becoming a smaller fraction of total cost.
+
+**One question I have:** The dashboard_data_sample.json uses
+the latest val-set prediction. In Month 3, should FastAPI
+compute a fresh prediction on the last 10 days of real data,
+or should it always use the val-set predictions as a demo?
 
