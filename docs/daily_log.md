@@ -587,3 +587,111 @@ the latest val-set prediction. In Month 3, should FastAPI
 compute a fresh prediction on the last 10 days of real data,
 or should it always use the val-set predictions as a demo?
 
+
+
+## Month 2, Day 15 — Monday
+**What I did:** Created api/ folder with 4 files. Defined all Pydantic
+schemas (PriceSignalRequest, PredictionResponse, HealthResponse,
+SummaryResponse, RouteDetail, SavingsDetail, SNNPredictionDetail).
+Built cost_engine.py, predictor.py stub, main.py with lifespan
+model loading. All 4 endpoints defined (/,/health,/predict,/summary).
+API runs with uvicorn api.main:app --reload.
+
+**What I noticed:** Pydantic validators automatically reject wrong
+price sequences (wrong length, negative values, out-of-range INR/BRL).
+The lifespan pattern loads the model once — much better than the
+hello-world approach that had no model loading at all.
+
+**One question I have:** The predictor.py currently tiles a single
+feature vector across all 10 timesteps (demo approximation). For
+Month 3, should I store the last 10 days of real val data in memory
+and use those as the actual sequence, or compute features fresh
+from the raw price_sequence input?
+
+
+## Month 2, Day 16 — Tuesday
+**What I did:** Built full SNNPredictor class with _load(),
+_build_feature_sequence(), preprocess(), predict(), get_status().
+Singleton pattern instantiated at module level. Ran standalone test
+with 3 price sequences (normal, trending, volatile) and 2 error cases.
+Verified preprocess() output shape is (1, 10, 9).
+
+**Standalone test results:**
+  Test 1 (normal)   : direction=[fill]  prob=[fill]  → [DIRECT/FALLBACK]
+  Test 2 (upward)   : direction=[fill]  prob=[fill]  → [DIRECT/FALLBACK]
+  Test 3 (volatile) : direction=[fill]  prob=[fill]  spike_rate=[fill]
+
+**What I noticed:** The volatile sequence produces higher spike_rate
+than the trending sequence — the LIF neurons respond to the magnitude
+of return changes, not just direction. This confirms the spike
+encoding is working as designed.
+
+**One question I have:** In _build_feature_sequence(), I forward-fill
+india_repo_rate as 6.5 (hardcoded). In Month 3, should I read the
+latest value from a FRED API call, or store it in a config file
+that gets updated periodically?
+
+
+## Month 2, Day 17 — Wednesday
+**What I did:** Rewrote api/main.py with full endpoint wiring.
+Four endpoints live: /, /health, /predict, /summary. Added global
+exception handler, CORS middleware, lifespan model verification.
+Built _build_prediction_response() helper to convert all numpy
+scalars to Python floats before Pydantic serialisation.
+
+**Endpoint test results:**
+  GET  /health  → 200  model_loaded=true ✅
+  GET  /summary → 200  savings=₹[fill] ✅
+  POST /predict → 200  recommendation=[fill] ✅
+  POST /predict (wrong length) → 400  detail="must have exactly 10" ✅
+  POST /predict (negative price) → 400 ✅
+
+**What I noticed:** The numpy-to-float conversion in
+_build_prediction_response() is critical — Pydantic can't serialise
+numpy.float32 directly and raises a silent 500 error without it.
+The `float()` wrapper on every value is the correct fix.
+
+**One question I have:** The /predict response is ~2KB of JSON.
+For the Streamlit dashboard, should I use the full /predict endpoint
+or create a /predict/lite endpoint that returns only the 6 most
+important fields (direction, recommendation, savings_inr,
+savings_percentage, spike_rate, confidence)?
+
+
+## Month 2, Day 18 — Thursday
+**What I did:** Created tests/test_api.py with 8 tests: health check,
+real val data prediction, 3 bad input cases, summary endpoint,
+3 transaction sizes, and response time benchmark. All tests use
+real INR/BRL prices from INRBRL_synthetic_clean.csv.
+
+**Test results:**
+  Test 1 Health check         : ✅
+  Test 2 Real data predict    : ✅  direction=[fill]  rec=[fill]
+  Test 3 Wrong length (400)   : ✅
+  Test 4 Negative price (400) : ✅
+  Test 5 Out of range (400)   : ✅
+  Test 6 Summary endpoint     : ✅
+  Test 7 Three tx sizes       : ✅
+  Test 8 Response time        : ✅  mean=[fill]ms
+
+**API prediction on real val data:**
+  Savings per ₹10L transaction : ₹[fill] ([fill]%)
+  Annual estimate (5 tx/month) : ₹[fill]
+  Recommendation               : [DIRECT/USD_FALLBACK]
+
+## Month 2, Day 19 — Friday
+**What I did:** Enhanced FastAPI metadata — tags_metadata, table in
+description, contact info, license. Added Field descriptions and
+examples to PriceSignalRequest. Verified /docs page shows full
+professional layout with example inputs and response schemas.
+
+**What I noticed:** The markdown table in app description renders
+beautifully in /docs — the key research numbers are immediately
+visible to anyone who opens the Swagger page. This is the first
+thing a supervisor or reviewer will see.
+
+**One question I have:** Should I add authentication (API key) to
+the /predict endpoint before the Month 3 dashboard demo, or is
+open access fine for a thesis project?
+
+
