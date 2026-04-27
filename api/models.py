@@ -158,6 +158,10 @@ class RouteDetail(BaseModel):
     steps             : List[str] = Field(
         description="Route steps e.g. ['INR→USD', 'USD→BRL']"
     )
+    itemised          : dict  = Field(
+        default={},
+        description="Itemised fee breakdown keyed by fee name"
+    )
 
 
 class SavingsDetail(BaseModel):

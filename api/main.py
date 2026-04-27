@@ -203,6 +203,7 @@ def _build_prediction_response(
             settlement_days  = str(u["settlement_days"]),
             settlement_hours = float(u["settlement_hours"]),
             steps            = list(u["steps"]),
+            itemised         = dict(u.get("itemised", {})),
         ),
 
         # ── Nested: SNN route ─────────────────────────────────────────
@@ -212,6 +213,7 @@ def _build_prediction_response(
             settlement_days  = str(s["settlement_days"]),
             settlement_hours = float(s["settlement_hours"]),
             steps            = list(s["steps"]),
+            itemised         = dict(s.get("itemised", {})),
         ),
 
         # ── Nested: savings ───────────────────────────────────────────

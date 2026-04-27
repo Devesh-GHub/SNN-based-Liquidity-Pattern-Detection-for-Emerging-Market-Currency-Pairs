@@ -54,12 +54,12 @@ def calculate_usd_route(amount_inr: float) -> dict:
         "settlement_hours": r["settlement_hours"],
         "steps"           : r["steps"],
         "itemised"        : {
-            "inr_usd_spread"   : round(spread,        2),
-            "swift_flat_fee"   : round(flat,           2),
-            "swift_gst"        : round(gst,            2),
-            "correspondent_fee": round(correspondent,  2),
-            "brl_spread"       : round(brl_spread,     2),
-            "iof_tax"          : round(iof,            2),
+            "inr_usd_spread_inr"   : round(spread,        2),
+            "swift_flat_fee_inr"   : round(flat,           2),
+            "swift_gst_inr"        : round(gst,            2),
+            "correspondent_fee_inr": round(correspondent,  2),
+            "brl_spread_inr"       : round(brl_spread,     2),
+            "iof_tax_inr"          : round(iof,            2),
         },
     }
 
@@ -77,9 +77,9 @@ def calculate_snn_route(amount_inr: float) -> dict:
         "settlement_hours": r["settlement_hours"],
         "steps"           : r["steps"],
         "itemised"        : {
-            "settlement_fee": round(fee,  2),
-            "flat_fee"      : round(flat, 2),
-            "flat_gst"      : round(gst,  2),
+            "settlement_fee_inr": round(fee,  2),
+            "flat_fee_inr"      : round(flat, 2),
+            "flat_gst_inr"      : round(gst,  2),
         },
         "assumption_note" : r["assumption_note"],
     }
