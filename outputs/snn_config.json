@@ -1,4 +1,6 @@
 {
+  "model": "BRICSLiquiditySNN",
+  "spike_rate": 0.478,
   "n_features": 9,
   "hidden1": 64,
   "hidden2": 32,
@@ -17,11 +19,13 @@
     "inter_spike_interval",
     "india_repo_rate"
   ],
-  "epochs_trained": 2,
-  "val_auc": 0.5376,
-  "val_acc": 0.5339,
-  "val_f1": 0.5075,
-  "val_precision": 0.4404,
-  "val_recall": 0.5986,
-  "optimal_threshold": 0.5163
+  "best_epoch": 27,
+  "total_epochs_trained": 47,
+  "val_auc": 0.553,
+  "val_acc": 0.5254,
+  "val_f1": 0.5602,
+  "val_precision": 0.4458,
+  "val_recall": 0.7535,
+  "val_optimal_threshold": 0.2366,
+  "optimal_threshold": 0.08
 }

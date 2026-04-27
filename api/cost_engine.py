@@ -143,7 +143,7 @@ def get_dashboard_summary(transaction_amount : float = 1_000_000,
                 if decision == "DIRECT"
                 else "Use USD route — model confidence below threshold"
             ),
-            "prob_threshold_used": 0.70,
+            "prob_threshold_used": 0.08,  # matches optimal_threshold in snn_config.json
             "rate_threshold_used": 0.10,
         },
         "assumptions"     : [

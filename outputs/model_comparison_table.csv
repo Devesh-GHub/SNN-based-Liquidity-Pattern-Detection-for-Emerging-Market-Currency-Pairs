@@ -1,14 +1,14 @@
 Metric,SNN (Ours),LSTM (Baseline),Winner
-Val Accuracy,0.5000,0.5311,LSTM
-Val Precision,0.4335,0.4375,Tie
-Val Recall,0.8028,0.5915,SNN ✅
-Val F1 Score,0.5630,0.5030,SNN ✅
-Val AUC-ROC,0.5550,0.5139,SNN ✅
-Optimal Threshold,0.5226,0.5083,—
+Val Accuracy,0.5000,0.5282,LSTM
+Val Precision,0.4335,0.4384,Tie
+Val Recall,0.8028,0.6268,SNN ✅
+Val F1 Score,0.5630,0.5159,SNN ✅
+Val AUC-ROC,0.5550,0.5144,SNN ✅
+Optimal Threshold,0.5226,0.5016,—
 Parameters,2945,5537,SNN ✅
 SynOps / FLOPs,9942,104960,SNN ✅
 Est. Energy (pJ),8.948,94.464,SNN ✅
 Energy reduction,10.6,1.0,LSTM
 Avg Spike Rate,0.478,N/A,—
-Inference time (ms),4.458,0.385,LSTM
-Total train time (s),7.0,3.3,LSTM
+Inference time (ms),32.198,1.437,LSTM
+Total train time (s),72.7,11.8,LSTM

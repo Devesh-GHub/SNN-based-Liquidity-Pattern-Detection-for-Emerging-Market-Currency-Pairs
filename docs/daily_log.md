@@ -1,3 +1,7 @@
+Backend: https://snn-based-liquidity-pattern-detection-i1t5.onrender.com/
+
+to run stramlit:  c:/Users/Devesh/brics_snn_project/.venv/Scripts/python.exe -m streamlit run dashboard/app.py
+
 # Daily Log
 
 ## Day 2 — Tuesday
@@ -695,3 +699,108 @@ the /predict endpoint before the Month 3 dashboard demo, or is
 open access fine for a thesis project?
 
 
+
+## Month 2, Day 20 — Saturday
+**What I did:** Created targeted requirements.txt, Procfile,
+render.yaml, .gitignore. Pushed to GitHub (excluding data CSVs
+and notebooks). Deployed to Render.com free tier. Tested live
+endpoints via curl and browser.
+
+**Live URL:** https://brics-snn-api.onrender.com
+**Health check (live):** [✅ / ⚠️ — fill after testing]
+**Predict endpoint (live):** [✅ / ⚠️ — fill after testing]
+**Docs page (live):** https://brics-snn-api.onrender.com/docs
+
+**Deployment issues encountered:**
+  [fill honestly — torch CPU install, path issues, etc.]
+
+**Model file sizes committed:**
+  snn_model_best.pth : [fill] KB
+  scaler.pkl         : [fill] KB
+  snn_config.json    : [fill] KB
+
+**One question I have:** Render free tier sleeps after 15 min.
+The Month 3 Streamlit dashboard needs to handle this gracefully.
+Should I add a "wake up" ping on dashboard load, or just show
+a loading message on first call?
+
+
+## Month 2, Day 21 — Sunday
+**What I did:** Wrote full paper draft (docs/paper_draft_month2.md)
+covering Abstract, Introduction, Related Work, Methodology (5 sections),
+Results (3 sections), Discussion (4 sections), Conclusion, and
+References. All tables filled with real numbers. Sections marked
+[fill] need test-set results from Month 3. Git committed all
+Month 2 work.
+
+**Paper word count:** ~3,500 words (target: 5,000–6,000 for full paper)
+**Sections complete:** Abstract, 1, 2, 3.1–3.5, 4.1–4.3, 5.1–5.4, 6
+**Sections pending:** Test set results (Section 4), Figures
+
+**Month 2 final deliverables:**
+  ✅ SNN trained: AUC=0.555, F1=0.563, spike_rate=47.8%
+  ✅ LSTM baseline: AUC=0.514, F1=0.503
+  ✅ Comparison table (Table 1 + Table 2)
+  ✅ Backtest: ₹12,18,000 saving (9.56%) over 354 days
+  ✅ FastAPI live: [your Render URL]
+  ✅ Paper draft: 3,500 words, all sections drafted
+
+**Month 3 priorities:**
+  1. Streamlit dashboard
+  2. Test set evaluation (open test_features.csv)
+  3. Final thesis assembly
+
+
+
+## Month 3, Day 3 — Wednesday
+**What I did:** Rebuilt after_panel.py with 3 fee rows, cost ratio
+badge, proportional comparison highlight. Rebuilt savings_panel.py
+with headline metric, 3 sub-metrics (time/monthly/annual), arrow
+visual, scaling note, mandatory st.info() caveat. All three panels
+render side-by-side correctly.
+
+**What I noticed:** The cost bar in before_panel visually proves
+the FX spread dominates — the flat SWIFT fee is invisible compared
+to the 2% spread. This is the most important insight for any
+policymaker looking at the dashboard.
+
+## Month 3, Day 4 — Thursday
+**What I did:** Built prediction_panel.py with direction/spike_rate/
+confidence metrics, colour-coded recommendation box, spike rate
+progress bar with threshold met/not-met indicators, full explainer
+expander with architecture diagram and decision table, model metadata
+row. Threshold values always visible — hiding them would suggest
+we don't understand the model's limitations.
+
+**What I noticed:** The expander content (architecture diagram, energy
+comparison) makes the dashboard suitable for a technical audience
+as well as a business one. A professor can click "How does the SNN
+make this decision?" and see the full architecture.
+
+
+## Month 3, Day 5 — Friday
+**What I did:** Rewrote api_client.py with URL resolution priority
+(env var → Streamlit secrets → localhost), call_predict_api() with
+5 error cases (400, 422, 503, timeout, connection), validate_price_input().
+Rewrote app.py with session state, demo toggle, price text input,
+Analyse button, spinner with cold-start warning, graceful fallback
+to placeholder when API offline.
+
+**End-to-end test:**
+  Enter prices → click Analyse → SNN runs → all 4 panels update ✅
+  Bad input (5 prices) → error message shown ✅
+  API offline → demo data shown with warning ✅
+
+## Month 3, Day 6 — Saturday
+**What I did:** Built 14_threshold_analysis.ipynb — swept thresholds
+0.50–0.90, plotted direct% vs precision with deployed threshold marker.
+Embedded chart in dashboard expander. Deployed to Streamlit Cloud.
+
+**Threshold analysis results:**
+  threshold=0.70: direct=9.9%, precision=51.4% ← deployed
+  Sweet spot: [fill from output]
+
+**Public URLs:**
+  API       : https://[your-render-url].onrender.com
+  Dashboard : https://[your-streamlit-url].streamlit.app
+  API Docs  : https://[your-render-url].onrender.com/docs

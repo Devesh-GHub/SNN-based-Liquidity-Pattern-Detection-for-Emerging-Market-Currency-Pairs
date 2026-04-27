@@ -294,7 +294,7 @@ def health_check():
             status_code = status.HTTP_503_SERVICE_UNAVAILABLE,
             detail      = (
                 "SNN model not loaded. "
-                "Ensure outputs/snn_model_best.pth exists."
+                "Ensure outputs/snn_model.pth exists."
             )
         )
 

@@ -16,12 +16,13 @@
     "inter_spike_interval",
     "india_repo_rate"
   ],
-  "val_auc": 0.5139,
-  "val_acc": 0.5311,
-  "val_f1": 0.503,
-  "val_precision": 0.4375,
-  "val_recall": 0.5915,
-  "optimal_threshold": 0.5083,
-  "best_epoch": 1,
-  "total_train_time_s": 3.3
+  "val_auc": 0.5144,
+  "val_acc": 0.5282,
+  "val_f1": 0.5159,
+  "val_precision": 0.4384,
+  "val_recall": 0.6268,
+  "optimal_threshold": 0.5016,
+  "best_epoch": 2,
+  "total_train_time_s": 11.8,
+  "total_epochs_trained": 22
 }

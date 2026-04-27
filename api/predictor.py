@@ -57,18 +57,14 @@ from spikingjelly.activation_based import functional
 
 
 # ── File paths ─────────────────────────────────────────────────────────
-# MODEL_PATH  = os.path.join(_PROJECT_ROOT, "outputs", "snn_model_best.pth")
-# CONFIG_PATH = os.path.join(_PROJECT_ROOT, "outputs", "snn_config.json")
-# SCALER_PATH = os.path.join(_PROJECT_ROOT, "outputs", "scaler.pkl")
-
 
 OUTPUTS_DIR = _find_outputs_dir()
-MODEL_PATH  = os.path.join(OUTPUTS_DIR, "snn_model_best.pth")
+MODEL_PATH  = os.path.join(OUTPUTS_DIR, "snn_model.pth")
 CONFIG_PATH = os.path.join(OUTPUTS_DIR, "snn_config.json")
 SCALER_PATH = os.path.join(OUTPUTS_DIR, "scaler.pkl")
 
 # ── Decision thresholds ────────────────────────────────────────────────
-PROB_THRESHOLD = 0.70   # locked from Day 13 backtest
+_PROB_THRESHOLD_DEFAULT = 0.52   # fallback only — overridden by config optimal_threshold at load
 RATE_THRESHOLD = 0.10   # minimum spike rate for DIRECT routing
 SPIKE_THRESHOLD = 0.003  # return threshold for spike encoding
 
@@ -98,15 +94,16 @@ class SNNPredictor:
     """
 
     def __init__(self):
-        self.model        = None
-        self.scaler       = None
-        self.config       = None
-        self.feature_cols = None
-        self.lookback     = 10
-        self.n_features   = 9
-        self.loaded       = False
-        self.load_time_s  = 0.0
-        self._device      = torch.device("cpu")
+        self.model          = None
+        self.scaler         = None
+        self.config         = None
+        self.feature_cols   = None
+        self.lookback       = 10
+        self.n_features     = 9
+        self.loaded         = False
+        self.load_time_s    = 0.0
+        self._device        = torch.device("cpu")
+        self.prob_threshold = _PROB_THRESHOLD_DEFAULT   # overwritten from config in _load()
 
         self._load()
 
@@ -131,9 +128,10 @@ class SNNPredictor:
             with open(CONFIG_PATH) as f:
                 self.config = json.load(f)
 
-            self.feature_cols = self.config.get("feature_cols", [])
-            self.n_features   = self.config["n_features"]
-            self.lookback     = self.config.get("lookback", 10)
+            self.feature_cols   = self.config.get("feature_cols", [])
+            self.n_features     = self.config["n_features"]
+            self.lookback       = self.config.get("lookback", 10)
+            self.prob_threshold = self.config.get("optimal_threshold", 0.52)
 
             # ── Instantiate model ─────────────────────────────────────
             self.model = BRICSLiquiditySNN(
@@ -160,6 +158,7 @@ class SNNPredictor:
                   f"→BN→LIF→FC(→{self.config['hidden2']})→BN→LIF→FC(→1)")
             print(f"   Parameters   : {self.model.count_parameters()}")
             print(f"   Val AUC      : {self.config.get('val_auc', 'N/A')}")
+            print(f"   Prob thresh  : {self.prob_threshold} (from config optimal_threshold)")
             print(f"   Lookback     : {self.lookback} days")
             print(f"   Features     : {self.n_features}")
             print(f"   Load time    : {self.load_time_s}s")
@@ -214,15 +213,14 @@ class SNNPredictor:
             # ── Feature 1: log return ─────────────────────────────────
             log_ret   = float(log_returns[t])
 
-            # ── Feature 2: rolling mean (as deviation from mean) ──────
-            window     = prices[max(0, t-6) : t+1]
-            roll_mean  = float(np.mean(window))
-            # Normalise: deviation from mean / mean (stationary)
-            roll_mean_feat = float((prices[t] - roll_mean) / roll_mean
-                                   if roll_mean != 0 else 0.0)
+            # ── Feature 2: rolling mean — raw value, matches training ────
+            # Training: price.rolling(7).mean() → raw price level (~15–17)
+            # Scaler was fitted on these raw values, so send raw here too.
+            window         = prices[max(0, t-6) : t+1]
+            roll_mean_feat = float(np.mean(window))
 
-            # ── Feature 3: rolling std ────────────────────────────────
-            roll_std   = float(np.std(window)) if len(window) > 1 else 0.0
+            # ── Feature 3: rolling std — ddof=1 matches pandas .std() ──
+            roll_std = float(np.std(window, ddof=1)) if len(window) > 1 else 0.0
 
             # ── Feature 4: price momentum 5d ──────────────────────────
             if t >= 5:
@@ -376,21 +374,18 @@ class SNNPredictor:
         direction  = "UP"   if prob >= 0.5 else "DOWN"
         confidence = abs(prob - 0.5) * 2
 
-        prob_margin  = max(0.0, (prob - PROB_THRESHOLD) / (1 - PROB_THRESHOLD))
-        rate_margin  = max(0.0, (spike_rate - RATE_THRESHOLD) / (1 - RATE_THRESHOLD))
-
-        if prob >= PROB_THRESHOLD and spike_rate >= RATE_THRESHOLD:
+        if prob >= self.prob_threshold and spike_rate >= RATE_THRESHOLD:
             recommendation = "DIRECT"
             rec_text       = (
                 f"Route via direct INR/BRL settlement. "
-                f"Prob={prob:.3f} ≥ {PROB_THRESHOLD}, "
+                f"Prob={prob:.3f} ≥ {self.prob_threshold}, "
                 f"spike_rate={spike_rate:.3f} ≥ {RATE_THRESHOLD}."
             )
-        elif prob < PROB_THRESHOLD:
+        elif prob < self.prob_threshold:
             recommendation = "USD_FALLBACK"
             rec_text       = (
                 f"Use USD route. Model probability {prob:.3f} "
-                f"below threshold {PROB_THRESHOLD}."
+                f"below threshold {self.prob_threshold}."
             )
         else:
             recommendation = "USD_FALLBACK"
@@ -411,7 +406,7 @@ class SNNPredictor:
             "recommendation"  : recommendation,
             "decision"        : recommendation,
             "recommendation_text": rec_text,
-            "prob_threshold_used": PROB_THRESHOLD,
+            "prob_threshold_used": self.prob_threshold,
             "rate_threshold_used": RATE_THRESHOLD,
             "latency_ms"      : round(latency_ms,  3),
         }
@@ -426,7 +421,7 @@ class SNNPredictor:
             "parameters"     : self.model.count_parameters() if self.model else 0,
             "val_auc"        : self.config.get("val_auc", 0.0) if self.config else 0.0,
             "load_time_s"    : self.load_time_s,
-            "prob_threshold" : PROB_THRESHOLD,
+            "prob_threshold" : self.prob_threshold,
             "rate_threshold" : RATE_THRESHOLD,
         }
 
