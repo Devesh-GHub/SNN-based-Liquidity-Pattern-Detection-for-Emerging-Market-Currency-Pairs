@@ -1,0 +1,115 @@
+<svg width="100%" viewBox="140 40 400 410" role="img" style="" xmlns="http://www.w3.org/2000/svg">
+<title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Spanda — sacred geometry neural pulse brand identity</title>
+<desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">A Sri Yantra inspired geometric form with a neural spike emerging from its center, merging ancient Indian sacred geometry with neuromorphic computing</desc>
+
+<!-- Deep void background -->
+<rect x="0" y="0" width="530" height="540" rx="0" fill="none"/>
+
+<!-- === SACRED GEOMETRY BASE — Sri Yantra inspired triangles === -->
+<!-- Concept: The Sri Yantra represents the cosmos — 9 interlocking triangles -->
+<!-- Here we use 5 triangles: upward (consciousness/signal) + downward (matter/settlement) -->
+<!-- The intersection creates a central bindu — the spike origin point -->
+
+<!-- Outermost circle — cosmic boundary -->
+<circle cx="340" cy="245" r="185" fill="none" stroke="#162030" stroke-width="0.4" style="fill:none;stroke:rgb(22, 32, 48);color:rgb(255, 255, 255);stroke-width:0.4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="340" cy="265" r="175" fill="none" stroke="#1A2840" stroke-width="0.3" style="fill:none;stroke:rgb(26, 40, 64);color:rgb(255, 255, 255);stroke-width:0.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Petal ring — 12 petals like a lotus / clock positions -->
+<g opacity="0.12" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.12;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+<path d="M340 85 L352 105 L328 105Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M432 107 L436 130 L416 120Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M500 170 L495 195 L478 178Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M520 265 L500 272 L500 258Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M500 360 L478 352 L495 335Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M432 423 L416 410 L436 400Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M340 445 L328 425 L352 425Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M248 423 L264 410 L244 400Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M180 360 L202 352 L185 335Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M160 265 L180 258 L180 272Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M180 170 L202 178 L185 195Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M248 107 L264 120 L244 130Z" fill="#00E5CC" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+</g>
+
+<!-- === INTERLOCKING TRIANGLES === -->
+
+<!-- Large upward triangle — signal / consciousness / prediction -->
+<path d="M340 110 L470 390 L210 390Z" fill="none" stroke="#00E5CC" stroke-width="0.7" stroke-opacity="0.6" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.7px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Large downward triangle — matter / settlement / transaction -->
+<path d="M340 420 L200 150 L480 150Z" fill="none" stroke="#00BFA8" stroke-width="0.7" stroke-opacity="0.6" style="fill:none;stroke:rgb(0, 191, 168);color:rgb(255, 255, 255);stroke-width:0.7px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Medium upward triangle -->
+<path d="M340 145 L445 365 L235 365Z" fill="none" stroke="#00E5CC" stroke-width="0.8" stroke-opacity="0.3" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.8px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Medium downward triangle -->
+<path d="M340 390 L228 175 L452 175Z" fill="none" stroke="#00BFA8" stroke-width="0.8" stroke-opacity="0.3" style="fill:none;stroke:rgb(0, 191, 168);color:rgb(255, 255, 255);stroke-width:0.8px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Inner upward triangle — close to core -->
+<path d="M340 180 L420 340 L260 340Z" fill="none" stroke="#00E5CC" stroke-width="1" stroke-opacity="0.45" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Inner downward triangle — close to core -->
+<path d="M340 355 L258 200 L422 200Z" fill="none" stroke="#00BFA8" stroke-width="1" stroke-opacity="0.45" style="fill:none;stroke:rgb(0, 191, 168);color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Innermost upward — the spike origin -->
+<path d="M340 210 L395 315 L285 315Z" fill="none" stroke="#00E5CC" stroke-width="1.2" stroke-opacity="0.6" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:1.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Innermost downward -->
+<path d="M340 325 L283 225 L397 225Z" fill="none" stroke="#00BFA8" stroke-width="1.2" stroke-opacity="0.6" style="fill:none;stroke:rgb(0, 191, 168);color:rgb(255, 255, 255);stroke-width:1.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- === THE BINDU — Central point where all triangles intersect === -->
+<!-- This is where the spike is born -->
+<circle cx="340" cy="265" r="28" fill="#0A1C2A" stroke="#00E5CC" stroke-width="1.2" stroke-opacity="0.5" style="fill:rgb(10, 28, 42);stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:1.2px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="340" cy="265" r="18" fill="#0D2535" stroke="#00E5CC" stroke-width="0.8" stroke-opacity="0.7" style="fill:rgb(13, 37, 53);stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.8px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- === THE SPIKE — Erupting from the bindu === -->
+<!-- This is what makes it neuromorphic — a spike waveform bursting through sacred geometry -->
+
+<!-- Spike shadow/echo -->
+<path d="M312 268 L326 268 L333 255 L340 220 L347 258 L354 268 L368 268" fill="none" stroke="#00E5CC" stroke-width="1.2" stroke-opacity="0.15" stroke-linecap="round" stroke-linejoin="round" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:1.2px;stroke-linecap:round;stroke-linejoin:round;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Primary spike — sharp, decisive, one pulse -->
+<path d="M315 265 L328 265 L334 252 L340 215 L346 255 L352 265 L365 265" fill="none" stroke="#00E5CC" stroke-width="2.5" stroke-opacity="1" stroke-linecap="round" stroke-linejoin="round" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:2.5px;stroke-linecap:round;stroke-linejoin:round;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Spike apex — the fire point -->
+<circle cx="340" cy="215" r="4" fill="#00E5CC" opacity="1" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="340" cy="215" r="10" fill="#00E5CC" opacity="0.1" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="340" cy="215" r="18" fill="#00E5CC" opacity="0.04" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.04;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- === ENERGY LINES radiating from bindu through triangle vertices === -->
+<!-- These connect the sacred geometry to the spike — signal pathways -->
+<line x1="340" y1="237" x2="340" y2="145" stroke="#00E5CC" stroke-width="0.3" stroke-opacity="0.15" style="fill:rgb(0, 0, 0);stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<line x1="315" y1="275" x2="235" y2="365" stroke="#00E5CC" stroke-width="0.3" stroke-opacity="0.1" style="fill:rgb(0, 0, 0);stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<line x1="365" y1="275" x2="445" y2="365" stroke="#00E5CC" stroke-width="0.3" stroke-opacity="0.1" style="fill:rgb(0, 0, 0);stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Signal dots traveling along energy lines -->
+<circle cx="340" cy="165" r="1.5" fill="#00E5CC" opacity="0.3" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.3;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="340" cy="130" r="1.2" fill="#00E5CC" opacity="0.2" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.2;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="275" cy="320" r="1.2" fill="#00E5CC" opacity="0.15" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.15;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="405" cy="320" r="1.2" fill="#00E5CC" opacity="0.15" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.15;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- === FIVE BRICS NODES on the outer circle === -->
+<!-- Abstract — no flags, no symbols. Five points of light = five nations = five pulses -->
+<circle cx="340" cy="80" r="3" fill="#00E5CC" opacity="0.7" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.7;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="510" cy="180" r="3" fill="#00E5CC" opacity="0.55" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.55;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="480" cy="390" r="3" fill="#00E5CC" opacity="0.45" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.45;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="200" cy="390" r="3" fill="#00E5CC" opacity="0.45" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.45;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="170" cy="180" r="3" fill="#00E5CC" opacity="0.55" style="fill:rgb(0, 229, 204);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.55;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- Faint connection arcs between BRICS nodes -->
+<path d="M340 80 Q430 110 510 180" fill="none" stroke="#00E5CC" stroke-width="0.3" stroke-opacity="0.12" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M510 180 Q510 290 480 390" fill="none" stroke="#00E5CC" stroke-width="0.3" stroke-opacity="0.12" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M480 390 Q340 430 200 390" fill="none" stroke="#00E5CC" stroke-width="0.3" stroke-opacity="0.12" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M200 390 Q170 290 170 180" fill="none" stroke="#00E5CC" stroke-width="0.3" stroke-opacity="0.12" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M170 180 Q250 110 340 80" fill="none" stroke="#00E5CC" stroke-width="0.3" stroke-opacity="0.12" style="fill:none;stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+<!-- === WORDMARK === -->
+
+<!-- Thin separator -->
+<line x1="240" y1="460" x2="440" y2="460" stroke="#162030" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgb(22, 32, 48);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+
+
+
+<!-- Subtle bottom accent -->
+<line x1="310" y1="650" x2="370" y2="650" stroke="#00E5CC" stroke-width="0.4" stroke-opacity="0.3" style="fill:rgb(0, 0, 0);stroke:rgb(0, 229, 204);color:rgb(255, 255, 255);stroke-width:0.4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+</svg>
