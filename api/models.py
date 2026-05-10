@@ -322,3 +322,62 @@ class ErrorResponse(BaseModel):
         default=None,
         description="Technical detail for debugging"
     )
+
+
+# ─────────────────────────────────────────────
+# LIQUIDITY ANALYSIS SCHEMAS
+# ─────────────────────────────────────────────
+
+class BacktestSummary(BaseModel):
+    """Aggregate stats from the 354-day validation backtest."""
+    val_period_start    : str   = Field(description="Backtest start date")
+    val_period_end      : str   = Field(description="Backtest end date")
+    n_trading_days      : int   = Field(description="Number of trading days in backtest")
+    transaction_size    : float = Field(description="Transaction size used in backtest (INR)")
+    n_direct            : int   = Field(description="Days routed via DIRECT settlement")
+    n_fallback          : int   = Field(description="Days routed via USD fallback")
+    direct_rate_pct     : float = Field(description="% of days using DIRECT route")
+    direct_accuracy_pct : float = Field(description="% of DIRECT decisions that were correct")
+    total_cost_snn      : float = Field(description="Total transaction cost under SNN routing (INR)")
+    total_cost_swift    : float = Field(description="Total cost if always SWIFT (INR)")
+    total_saving        : float = Field(description="Total saving over backtest period (INR)")
+    saving_pct          : float = Field(description="Saving as % of always-SWIFT baseline")
+    annualised_saving   : float = Field(description="Projected annual saving (252 trading days, INR)")
+    prob_threshold      : float = Field(description="Probability threshold used in backtest")
+    rate_threshold      : float = Field(description="Spike rate threshold used in backtest")
+
+
+class RiskAnalysis(BaseModel):
+    """Right vs wrong DIRECT routing decision breakdown."""
+    n_right_direct        : int   = Field(description="Correct DIRECT decisions")
+    n_wrong_direct        : int   = Field(description="Incorrect DIRECT decisions")
+    avg_conf_correct      : float = Field(description="Avg confidence on correct DIRECT days")
+    avg_conf_wrong        : float = Field(description="Avg confidence on wrong DIRECT days")
+    wrong_direct_cost     : float = Field(description="Total cost paid on wrong DIRECT days (INR)")
+    wrong_swift_cost      : float = Field(description="What SWIFT would have cost on those days (INR)")
+    even_wrong_saved_money: bool  = Field(
+        description="True if even wrong DIRECT decisions were cheaper than SWIFT"
+    )
+
+
+class SavingsScaleRow(BaseModel):
+    """Cost comparison at one transaction size."""
+    label      : str   = Field(description="Human label e.g. '₹10 Lakh'")
+    amount     : float = Field(description="Transaction amount in INR")
+    usd_cost   : float = Field(description="USD route cost in INR")
+    snn_cost   : float = Field(description="SNN route cost in INR")
+    saving     : float = Field(description="Saving per transaction in INR")
+    saving_pct : float = Field(description="Saving as % of USD cost")
+
+
+class LiquidityAnalysisResponse(BaseModel):
+    """
+    Full liquidity analysis payload from GET /liquidity.
+
+    Contains the complete 354-day backtest results, per-day timeline,
+    risk breakdown, and savings scaling table.
+    """
+    summary         : BacktestSummary       = Field(description="Aggregate backtest stats")
+    timeline        : List[dict]            = Field(description="Per-day series data for charts")
+    risk_analysis   : RiskAnalysis          = Field(description="Right vs wrong routing breakdown")
+    savings_scaling : List[SavingsScaleRow] = Field(description="Cost comparison at 3 transaction sizes")

@@ -8,7 +8,15 @@ This module is imported by api/predictor.py and api/main.py.
 All monetary values are in INR.
 """
 
+import os
+import json
 from datetime import datetime
+
+import pandas as pd
+
+_OUTPUTS_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "outputs"
+)
 
 # ── Fee constants (from Month 1 Day 13 research) ──────────────────────
 FEE_CONFIG = {
@@ -152,4 +160,91 @@ def get_dashboard_summary(transaction_amount : float = 1_000_000,
             "Annual saving assumes constant transaction volume",
             "Predictions from validation-set model (AUC=0.555)",
         ],
+    }
+
+
+def get_liquidity_analysis() -> dict:
+    """
+    Load and return the full backtest-based liquidity analysis.
+
+    Reads outputs/backtest_results.csv and outputs/backtest_summary.json
+    (produced by notebooks/13_business_logic.ipynb) and returns a
+    structured payload consumed by GET /liquidity and the dashboard panel.
+
+    Returns
+    -------
+    dict with keys:
+        summary          - aggregate backtest stats from JSON
+        timeline         - per-day series (date, decision, savings, cumulative)
+        risk_analysis    - right/wrong DIRECT breakdown
+        savings_scaling  - per-transaction costs at 3 transaction sizes
+    """
+    backtest_csv  = os.path.join(_OUTPUTS_DIR, "backtest_results.csv")
+    summary_json  = os.path.join(_OUTPUTS_DIR, "backtest_summary.json")
+
+    with open(summary_json) as f:
+        summary = json.load(f)
+
+    df = pd.read_csv(backtest_csv, index_col="date", parse_dates=True)
+    df = df.sort_index()
+
+    # ── Timeline series ───────────────────────────────────────────────
+    timeline = [
+        {
+            "date"               : str(idx.date()),
+            "decision"           : str(row["decision"]),
+            "snn_prob"           : round(float(row["snn_prob"]),        4),
+            "snn_spike_rate"     : round(float(row["snn_spike_rate"]),  4),
+            "saving_day"         : round(float(row["saving_day"]),      2),
+            "cumulative_saving"  : round(float(row["cumulative_saving"]),  2),
+            "cumulative_baseline": round(float(row["cumulative_baseline"]), 2),
+            "cumulative_direct"  : round(float(row["cumulative_direct"]),  2),
+            "snn_correct"        : int(row["snn_correct"]),
+            "confidence"         : round(float(row["confidence"]),      4),
+        }
+        for idx, row in df.iterrows()
+    ]
+
+    # ── Risk analysis ─────────────────────────────────────────────────
+    direct_df    = df[df["decision"] == "DIRECT"]
+    right_direct = direct_df[direct_df["snn_correct"] == 1]
+    wrong_direct = direct_df[direct_df["snn_correct"] == 0]
+
+    wrong_direct_cost = float(wrong_direct["cost_taken"].sum())   if len(wrong_direct) > 0 else 0.0
+    wrong_swift_cost  = float(wrong_direct["cost_baseline"].sum()) if len(wrong_direct) > 0 else 0.0
+
+    risk_analysis = {
+        "n_right_direct"       : int(len(right_direct)),
+        "n_wrong_direct"       : int(len(wrong_direct)),
+        "avg_conf_correct"     : round(float(right_direct["confidence"].mean()), 4) if len(right_direct) > 0 else 0.0,
+        "avg_conf_wrong"       : round(float(wrong_direct["confidence"].mean()),  4) if len(wrong_direct) > 0 else 0.0,
+        "wrong_direct_cost"    : round(wrong_direct_cost,  2),
+        "wrong_swift_cost"     : round(wrong_swift_cost,   2),
+        "even_wrong_saved_money": wrong_direct_cost < wrong_swift_cost,
+    }
+
+    # ── Savings scaling across three transaction sizes ────────────────
+    savings_scaling = []
+    for amount, label in [
+        (100_000,   "₹1 Lakh"),
+        (1_000_000, "₹10 Lakh"),
+        (5_000_000, "₹50 Lakh"),
+    ]:
+        usd    = calculate_usd_route(amount)
+        snn    = calculate_snn_route(amount)
+        saving = usd["total_cost_inr"] - snn["total_cost_inr"]
+        savings_scaling.append({
+            "label"      : label,
+            "amount"     : float(amount),
+            "usd_cost"   : float(usd["total_cost_inr"]),
+            "snn_cost"   : float(snn["total_cost_inr"]),
+            "saving"     : round(saving, 2),
+            "saving_pct" : round(saving / usd["total_cost_inr"] * 100, 1),
+        })
+
+    return {
+        "summary"        : summary,
+        "timeline"       : timeline,
+        "risk_analysis"  : risk_analysis,
+        "savings_scaling": savings_scaling,
     }

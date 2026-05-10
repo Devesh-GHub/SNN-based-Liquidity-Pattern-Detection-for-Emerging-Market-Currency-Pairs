@@ -160,6 +160,26 @@ def call_summary_api(amount: float) -> tuple:
         return None, str(e)
 
 
+def call_liquidity_api() -> tuple:
+    """
+    GET /liquidity and return (liquidity_dict, error_string).
+
+    Returns the full backtest analysis data for the Liquidity Analysis panel.
+    Falls back to loading from local outputs/ files if the API is unreachable.
+    """
+    try:
+        resp = requests.get(f"{API_URL}/liquidity", timeout=15)
+        if resp.status_code == 200:
+            return resp.json(), None
+        return None, f"Liquidity API error: {resp.status_code}"
+    except requests.exceptions.Timeout:
+        return None, "Liquidity request timed out"
+    except requests.exceptions.ConnectionError:
+        return None, f"Cannot connect to API at {API_URL}"
+    except Exception as e:
+        return None, str(e)
+
+
 def validate_price_input(raw_input: str) -> tuple:
     """
     Parse and validate a comma-separated price string.

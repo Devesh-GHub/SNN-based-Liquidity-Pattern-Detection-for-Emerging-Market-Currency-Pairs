@@ -38,9 +38,13 @@ from api.models import (
     RouteDetail,
     SavingsDetail,
     SNNPredictionDetail,
+    LiquidityAnalysisResponse,
+    BacktestSummary,
+    RiskAnalysis,
+    SavingsScaleRow,
 )
 from api.predictor   import predictor
-from api.cost_engine import get_dashboard_summary
+from api.cost_engine import get_dashboard_summary, get_liquidity_analysis
 
 # ── Startup timestamp ─────────────────────────────────────────────────
 _API_START_TIME = time.time()
@@ -96,6 +100,14 @@ tags_metadata = [
         "description": (
             "Cost comparison endpoints — no model inference. "
             "Use for the dashboard cost calculator slider."
+        ),
+    },
+    {
+        "name"       : "Liquidity Analysis",
+        "description": (
+            "Full backtest liquidity analysis over the 354-day validation period. "
+            "Returns per-day settlement decisions, cumulative savings timeline, "
+            "risk breakdown, and savings scaling for the dashboard charts."
         ),
     },
 ]
@@ -265,12 +277,13 @@ def root():
         "model_loaded" : predictor.loaded,
         "uptime_s"     : round(time.time() - _API_START_TIME, 1),
         "endpoints"    : {
-            "GET  /"        : "This info",
-            "GET  /health"  : "Model health check",
-            "POST /predict" : "SNN inference + cost comparison",
-            "GET  /summary" : "Cost comparison (no inference)",
-            "GET  /docs"    : "Swagger UI",
-            "GET  /redoc"   : "ReDoc UI",
+            "GET  /"          : "This info",
+            "GET  /health"    : "Model health check",
+            "POST /predict"   : "SNN inference + cost comparison",
+            "GET  /summary"   : "Cost comparison (no inference)",
+            "GET  /liquidity" : "Full backtest liquidity analysis + charts data",
+            "GET  /docs"      : "Swagger UI",
+            "GET  /redoc"     : "ReDoc UI",
         },
     }
 
@@ -464,6 +477,58 @@ def summary(
         raise HTTPException(
             status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail      = f"Summary failed: {str(e)}"
+        )
+
+
+@app.get("/liquidity",
+         response_model = LiquidityAnalysisResponse,
+         tags           = ["Liquidity Analysis"],
+         summary        = "Full backtest liquidity analysis",
+         responses      = {
+             500: {"description": "Backtest data not found or load error"},
+         })
+def liquidity_analysis():
+    """
+    Returns the complete liquidity analysis from the 354-day validation backtest.
+
+    This endpoint serves all chart data for the dashboard's **Liquidity Analysis**
+    panel. No model inference is required — data is pre-computed from the backtest
+    run in `notebooks/13_business_logic.ipynb`.
+
+    ### Returns
+    - **summary** — aggregate stats (total saving, DIRECT rate, accuracy, annualised saving)
+    - **timeline** — per-day series: decision, saving, cumulative saving vs baseline
+    - **risk_analysis** — breakdown of correct vs incorrect DIRECT decisions
+    - **savings_scaling** — cost comparison at ₹1L / ₹10L / ₹50L transaction sizes
+
+    ### Key numbers (val period 2024-03-11 → 2025-02-27)
+    | Metric | Value |
+    |--------|-------|
+    | Total saving | ₹92,22,000 |
+    | DIRECT rate | 74.9% |
+    | Fee compression | 72.4% vs always-SWIFT |
+    | Annualised saving | ₹65,64,814 |
+    """
+    try:
+        data = get_liquidity_analysis()
+        return LiquidityAnalysisResponse(
+            summary          = BacktestSummary(**data["summary"]),
+            timeline         = data["timeline"],
+            risk_analysis    = RiskAnalysis(**data["risk_analysis"]),
+            savings_scaling  = [SavingsScaleRow(**r) for r in data["savings_scaling"]],
+        )
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail      = (
+                f"Backtest data not found: {str(e)}. "
+                "Run notebooks/13_business_logic.ipynb to generate it."
+            )
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail      = f"Liquidity analysis failed: {str(e)}"
         )
 
 

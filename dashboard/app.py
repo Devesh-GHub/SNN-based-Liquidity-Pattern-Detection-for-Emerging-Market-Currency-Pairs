@@ -28,8 +28,9 @@ from dashboard.components.before_panel     import render_before_panel
 from dashboard.components.after_panel      import render_after_panel
 from dashboard.components.savings_panel    import render_savings_panel, render_metrics_row
 from dashboard.components.prediction_panel import render_prediction_panel
+from dashboard.components.liquidity_panel  import render_liquidity_panel
 from dashboard.utils.api_client            import (
-    call_predict_api, call_health_api,
+    call_predict_api, call_health_api, call_liquidity_api,
     validate_price_input, API_URL,
 )
 
@@ -1097,6 +1098,96 @@ def _render_sidebar(logo_uri: str):
         st.caption("Research prototype — not financial advice.")
 
 
+def _load_liquidity_local() -> dict | None:
+    """
+    Load liquidity analysis data from local outputs/ files.
+
+    Used as fallback when the API is unavailable or in demo mode.
+    Reads outputs/backtest_results.csv and outputs/backtest_summary.json
+    and returns the same structure as GET /liquidity.
+    """
+    try:
+        import json
+        import pandas as pd
+
+        _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        summary_path  = os.path.join(_root, "outputs", "backtest_summary.json")
+        backtest_path = os.path.join(_root, "outputs", "backtest_results.csv")
+
+        if not os.path.exists(summary_path) or not os.path.exists(backtest_path):
+            return None
+
+        with open(summary_path) as f:
+            summary = json.load(f)
+
+        df = pd.read_csv(backtest_path, index_col="date", parse_dates=True).sort_index()
+
+        timeline = [
+            {
+                "date"               : str(idx.date()),
+                "decision"           : str(row["decision"]),
+                "snn_prob"           : round(float(row["snn_prob"]),          4),
+                "snn_spike_rate"     : round(float(row["snn_spike_rate"]),    4),
+                "saving_day"         : round(float(row["saving_day"]),        2),
+                "cumulative_saving"  : round(float(row["cumulative_saving"]), 2),
+                "cumulative_baseline": round(float(row["cumulative_baseline"]), 2),
+                "cumulative_direct"  : round(float(row["cumulative_direct"]), 2),
+                "snn_correct"        : int(row["snn_correct"]),
+                "confidence"         : round(float(row["confidence"]),        4),
+            }
+            for idx, row in df.iterrows()
+        ]
+
+        direct_df    = df[df["decision"] == "DIRECT"]
+        right_direct = direct_df[direct_df["snn_correct"] == 1]
+        wrong_direct = direct_df[direct_df["snn_correct"] == 0]
+
+        wdc = float(wrong_direct["cost_taken"].sum())   if len(wrong_direct) > 0 else 0.0
+        wsc = float(wrong_direct["cost_baseline"].sum()) if len(wrong_direct) > 0 else 0.0
+
+        risk_analysis = {
+            "n_right_direct"       : int(len(right_direct)),
+            "n_wrong_direct"       : int(len(wrong_direct)),
+            "avg_conf_correct"     : round(float(right_direct["confidence"].mean()), 4) if len(right_direct) > 0 else 0.0,
+            "avg_conf_wrong"       : round(float(wrong_direct["confidence"].mean()),  4) if len(wrong_direct) > 0 else 0.0,
+            "wrong_direct_cost"    : round(wdc, 2),
+            "wrong_swift_cost"     : round(wsc, 2),
+            "even_wrong_saved_money": wdc < wsc,
+        }
+
+        # Savings scaling (hardcoded — same formula as cost_engine.py)
+        _fee = {
+            "usd": {"spread": 0.020, "flat": 1_000, "gst": 0.18,
+                    "corr": 25 * 84.0, "brl": 0.015, "iof": 0.0038},
+            "snn": {"fee": 0.001, "flat": 200, "gst": 0.18},
+        }
+        scaling = []
+        for amount, label in [(100_000, "₹1 Lakh"), (1_000_000, "₹10 Lakh"), (5_000_000, "₹50 Lakh")]:
+            u = _fee["usd"]
+            s = _fee["snn"]
+            usd_cost = (amount * u["spread"] + u["flat"] + u["flat"] * u["gst"] +
+                        u["corr"] + amount * u["brl"] + amount * u["iof"])
+            snn_cost = amount * s["fee"] + s["flat"] + s["flat"] * s["gst"]
+            saving   = usd_cost - snn_cost
+            scaling.append({
+                "label"     : label,
+                "amount"    : float(amount),
+                "usd_cost"  : round(usd_cost, 2),
+                "snn_cost"  : round(snn_cost, 2),
+                "saving"    : round(saving,   2),
+                "saving_pct": round(saving / usd_cost * 100, 1),
+            })
+
+        return {
+            "summary"        : summary,
+            "timeline"       : timeline,
+            "risk_analysis"  : risk_analysis,
+            "savings_scaling": scaling,
+        }
+    except Exception:
+        return None
+
+
 def main():
     logo_uri = _load_logo_b64()
     _render_sidebar(logo_uri)
@@ -1284,7 +1375,36 @@ def main():
                 "Vertical line marks deployed threshold (0.70)."
             )
 
-    # ── ROW 7: Assumptions & caveats ──────────────────────────────────
+    # ── ROW 7: Liquidity Analysis ──────────────────────────────────────
+    st.markdown(
+        '<div class="dashboard-section-title">Liquidity Analysis — Backtest Results</div>',
+        unsafe_allow_html=True,
+    )
+
+    liq_data = None
+    liq_error = None
+
+    if not st.session_state.demo_mode:
+        with st.spinner("Loading liquidity analysis…"):
+            liq_data, liq_error = call_liquidity_api()
+
+    if liq_data is None:
+        # Load from local outputs/ as fallback (works in demo mode and offline)
+        liq_data = _load_liquidity_local()
+
+    if liq_data:
+        render_liquidity_panel(liq_data)
+        if liq_error:
+            st.caption(f"Note: Loaded from local cache — {liq_error}")
+    else:
+        st.info(
+            "Liquidity analysis data not found. "
+            "Run `notebooks/13_business_logic.ipynb` to generate the backtest results."
+        )
+
+    st.divider()
+
+    # ── ROW 8: Assumptions & caveats ──────────────────────────────────
     with st.expander("Assumptions & Honest Caveats", expanded=False):
         for a in data.get("assumptions", []):
             st.markdown(f"- {a}")
